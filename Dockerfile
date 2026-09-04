@@ -2,7 +2,6 @@ FROM codercom/code-server:latest
 
 USER root
 
-# Install useful tools
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -19,13 +18,7 @@ RUN apt-get update && apt-get install -y \
     npm \
     && rm -rf /var/lib/apt/lists/*
 
-# Create workspace
-RUN mkdir -p /workspace && \
-    chown -R coder:coder /workspace
-
-# Railway uses PORT automatically
-ENV PASSWORD=change-me
-ENV PORT=8080
+RUN mkdir -p /workspace && chown -R coder:coder /workspace
 
 USER coder
 
@@ -33,4 +26,6 @@ WORKDIR /workspace
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "code-server --bind-addr 0.0.0.0:${PORT} --auth password /workspace"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
+CMD ["--bind-addr", "0.0.0.0:8080", "--auth", "password", "/workspace"]
