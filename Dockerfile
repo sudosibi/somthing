@@ -20,12 +20,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir -p /workspace && chown -R coder:coder /workspace
 
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 USER coder
 
 WORKDIR /workspace
 
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-
-CMD ["--bind-addr", "0.0.0.0:8080", "--auth", "password", "/workspace"]
+ENTRYPOINT ["/start.sh"]
